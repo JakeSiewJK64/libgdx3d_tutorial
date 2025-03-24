@@ -24,7 +24,10 @@ public class Populator {
     // Vector3(-1, 5, 0), 1f);
     // world.spawnObject(false, "ball", CollisionShapeType.SPHERE, false, new
     // Vector3(-2, 6, 0), 1f);
-    world.player = world.spawnObject(false, "ducky", null, CollisionShapeType.SPHERE, false, new Vector3(5, 5, 5), 1f);
+    GameObject go = world.spawnObject(false, "ducky", null, CollisionShapeType.CAPSULE, true, new Vector3(0, 1, 0),
+        Settings.playerMass);
+    world.setPlayer(go);
+
     world.spawnObject(true, "arch", null, CollisionShapeType.MESH, false, Vector3.Zero, 1f);
     world.spawnObject(true, "stairs", "stairsProxy", CollisionShapeType.MESH, false, Vector3.Zero, 1f);
   }

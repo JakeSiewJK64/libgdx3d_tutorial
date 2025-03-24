@@ -42,27 +42,14 @@ public class World implements Disposable {
     isDirty = true;
   }
 
-  public GameObject getPlayer() {
-    return player;
-  }
-
-  public PlayerController getPlayerController() {
-    return playerController;
-  }
-
-  public boolean isDirty() {
-    return isDirty;
-  }
-
-  public int getNumGameObjects() {
-    return gameObjects.size;
-  }
-
-  public GameObject getGameObject(int index) {
-    return gameObjects.get(index);
+  public void setPlayer(GameObject player) {
+    this.player = player;
+    player.body.setPlayerCharacteristics();
   }
 
   public void clear() {
+    physicsWorld.reset();
+    playerController.reset();
     gameObjects.clear();
     player = null;
     isDirty = true;
@@ -142,7 +129,7 @@ public class World implements Disposable {
   }
 
   public void shootBall() {
-    dir.set(player.getDirection());
+    dir.set(playerController.getViewingDirection());
     spawnPos.set(dir);
 
     Vector3 playerPosition = player.getPosition();
@@ -153,5 +140,25 @@ public class World implements Disposable {
     shootDirection.y += .5f;
     shootDirection.scl(Settings.ballForce);
     ball.body.applyForce(shootDirection);
+  }
+
+  public GameObject getPlayer() {
+    return player;
+  }
+
+  public PlayerController getPlayerController() {
+    return playerController;
+  }
+
+  public boolean isDirty() {
+    return isDirty;
+  }
+
+  public int getNumGameObjects() {
+    return gameObjects.size;
+  }
+
+  public GameObject getGameObject(int index) {
+    return gameObjects.get(index);
   }
 }

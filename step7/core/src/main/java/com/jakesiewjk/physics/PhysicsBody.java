@@ -15,7 +15,6 @@ import com.jakesiewjk.Settings;
 
 public class PhysicsBody {
   public DGeom geom;
-  public boolean visible = true;
   private Vector3 position;
   private Quaternion quaternion;
   private ModelInstance debugInstance;
@@ -60,7 +59,7 @@ public class PhysicsBody {
   }
 
   public void setOrientation(Quaternion q) {
-    DQuaternion odeQ = new DQuaternion(q.w, -q.x, -q.z, q.y);
+    DQuaternion odeQ = new DQuaternion(q.w, q.x, -q.z, q.y);
     geom.setQuaternion(odeQ);
 
     DBody rigidBody = geom.getBody();
@@ -72,7 +71,6 @@ public class PhysicsBody {
 
   public void render(ModelBatch batch) {
     debugInstance.transform.set(getPosition(), getOrientation());
-    batch.render(debugInstance);
 
     // render physics debug
     Color color = COLOR_STATIC;
@@ -86,6 +84,7 @@ public class PhysicsBody {
     }
 
     debugInstance.materials.first().set(ColorAttribute.createDiffuse(color));
+    batch.render(debugInstance);
   }
 
   public void applyForce(Vector3 force) {
@@ -93,6 +92,7 @@ public class PhysicsBody {
     rigidBody.addForce(force.x, -force.z, force.y); // swap -z and y
   }
 
+  // player physics does not go to sleep if inactivity
   public void setPlayerCharacteristics() {
     DBody rigidBody = geom.getBody();
     rigidBody.setDamping(Settings.playerLinearDamping, Settings.playerAngularDamping);
