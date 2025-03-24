@@ -9,18 +9,25 @@ public class GameObject {
   public final Scene scene;
   public final Vector3 direction;
   public final PhysicsBody body;
-  public boolean visible = true;
+  public boolean visible;
 
   public GameObject(Scene scene, PhysicsBody body) {
     this.scene = scene;
     this.body = body;
 
-    direction = new Vector3();
+    if (body != null) {
+      body.geom.setData(this);
+    }
 
-    body.geom.setData(this);
+    visible = true;
+    direction = new Vector3();
   }
 
   public Vector3 getPosition() {
+    if (body == null) {
+      return Vector3.Zero;
+    }
+
     return body.getPosition();
   }
 
