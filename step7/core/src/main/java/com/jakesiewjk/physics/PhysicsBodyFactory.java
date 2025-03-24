@@ -25,6 +25,7 @@ import com.github.antzGames.gdx.ode4j.ode.DGeom;
 import com.github.antzGames.gdx.ode4j.ode.DMass;
 import com.github.antzGames.gdx.ode4j.ode.DTriMeshData;
 import com.github.antzGames.gdx.ode4j.ode.OdeHelper;
+import com.jakesiewjk.physics.enums.CollisionShapeType;
 
 public class PhysicsBodyFactory implements Disposable {
 

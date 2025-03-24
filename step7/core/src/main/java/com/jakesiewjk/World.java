@@ -7,10 +7,10 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.jakesiewjk.controllers.PlayerController;
-import com.jakesiewjk.physics.CollisionShapeType;
 import com.jakesiewjk.physics.PhysicsBody;
 import com.jakesiewjk.physics.PhysicsBodyFactory;
 import com.jakesiewjk.physics.PhysicsWorld;
+import com.jakesiewjk.physics.enums.CollisionShapeType;
 
 import net.mgsx.gltf.loaders.gltf.GLTFLoader;
 import net.mgsx.gltf.scene3d.scene.Scene;

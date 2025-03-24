@@ -1,7 +1,7 @@
 package com.jakesiewjk;
 
 import com.badlogic.gdx.math.Vector3;
-import com.jakesiewjk.physics.CollisionShapeType;
+import com.jakesiewjk.physics.enums.CollisionShapeType;
 
 public class Populator {
   public static void populate(World world) {
