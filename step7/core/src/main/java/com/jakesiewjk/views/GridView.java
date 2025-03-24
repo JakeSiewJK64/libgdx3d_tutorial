@@ -1,4 +1,4 @@
-package com.jakesiewjk;
+package com.jakesiewjk.views;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.VertexAttributes;

@@ -1,10 +1,12 @@
-package com.jakesiewjk;
+package com.jakesiewjk.controllers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.IntIntMap;
+import com.jakesiewjk.GameObject;
+import com.jakesiewjk.Settings;
 
 public class PlayerController extends InputAdapter {
   public int forwardKey = Input.Keys.W;

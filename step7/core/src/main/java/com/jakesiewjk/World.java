@@ -6,6 +6,11 @@ import com.badlogic.gdx.graphics.g3d.model.Node;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import com.jakesiewjk.controllers.PlayerController;
+import com.jakesiewjk.physics.CollisionShapeType;
+import com.jakesiewjk.physics.PhysicsBody;
+import com.jakesiewjk.physics.PhysicsBodyFactory;
+import com.jakesiewjk.physics.PhysicsWorld;
 
 import net.mgsx.gltf.loaders.gltf.GLTFLoader;
 import net.mgsx.gltf.scene3d.scene.Scene;
@@ -63,23 +68,37 @@ public class World implements Disposable {
     isDirty = true;
   }
 
-  public GameObject spawnObject(boolean isStatic, String name, CollisionShapeType shape, boolean resetPosition,
+  public GameObject spawnObject(boolean isStatic, String name, String proxyName, CollisionShapeType shape,
+      boolean resetPosition,
       Vector3 position, float mass) {
-    Scene scene = new Scene(sceneAsset.scene, name);
+    Scene scene = loadNode(name, resetPosition, position);
+    ModelInstance collisionInstance = scene.modelInstance;
 
-    if (scene.modelInstance.nodes.size == 0) {
-      throw new RuntimeException("Cannot find node in GLTF file: " + name);
+    if (proxyName != null) {
+      Scene proxyScene = loadNode(proxyName, resetPosition, position);
+      collisionInstance = proxyScene.modelInstance;
     }
 
-    applyNodeTransform(resetPosition, scene.modelInstance, scene.modelInstance.nodes.first());
-    scene.modelInstance.transform.translate(position);
-
-    PhysicsBody body = factory.createBody(scene.modelInstance, shape, mass, isStatic);
+    PhysicsBody body = factory.createBody(collisionInstance, shape, mass, isStatic);
     GameObject go = new GameObject(scene, body);
     gameObjects.add(go);
     isDirty = true;
 
     return go;
+  }
+
+  private Scene loadNode(String nodeName, boolean resetPosition, Vector3 position) {
+    Scene scene = new Scene(sceneAsset.scene, nodeName);
+
+    if (scene.modelInstance.nodes.size == 0) {
+      throw new RuntimeException("Cannot find node in GLTF file: " + nodeName);
+    }
+
+    applyNodeTransform(resetPosition, scene.modelInstance, scene.modelInstance.nodes.first());
+
+    scene.modelInstance.transform.translate(position);
+
+    return scene;
   }
 
   private void applyNodeTransform(boolean resetPosition, ModelInstance modelInstance, Node node) {
@@ -129,7 +148,7 @@ public class World implements Disposable {
     Vector3 playerPosition = player.getPosition();
     spawnPos.add(playerPosition);
 
-    GameObject ball = spawnObject(false, "ball", CollisionShapeType.SPHERE, true, spawnPos, Settings.ballMass);
+    GameObject ball = spawnObject(false, "ball", null, CollisionShapeType.SPHERE, true, spawnPos, Settings.ballMass);
     shootDirection.set(dir);
     shootDirection.y += .5f;
     shootDirection.scl(Settings.ballForce);

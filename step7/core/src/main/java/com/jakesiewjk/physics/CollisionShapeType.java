@@ -1,4 +1,4 @@
-package com.jakesiewjk;
+package com.jakesiewjk.physics;
 
 public enum CollisionShapeType {
   BOX, SPHERE, CAPSULE, CYLINDER, MESH

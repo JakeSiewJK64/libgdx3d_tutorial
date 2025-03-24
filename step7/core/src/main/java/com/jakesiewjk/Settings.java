@@ -8,10 +8,10 @@ public class Settings {
 
   static public float eyeHeight = 2.5f; // meters
 
-  static public float walkSpeed = 10f; // m/s
+  static public float walkSpeed = 3f; // m/s
   static public float runFactor = 2f; // multiplier for walk speed
   static public float turnSpeed = 120f; // degrees/s
-  static public float jumpForce = 5.0f;
+  static public float jumpForce = 1.0f;
   static public float groundRayLength = 1.2f;
   static public float navHeight = 1.6f; // should be about half the height of the characters
 
@@ -39,5 +39,5 @@ public class Settings {
   static public Vector3 gunPosition = new Vector3(-1.1f, 1.9f, 1.8f); // gun position in gun camera view
   static public float gunScale = 3.0f;
 
-  static public final String GLTF_FILE = "models/step21.gltf";
+  static public final String GLTF_FILE = "models/step12.gltf";
 }

@@ -1,6 +1,7 @@
 package com.jakesiewjk;
 
 import com.badlogic.gdx.math.Vector3;
+import com.jakesiewjk.physics.PhysicsBody;
 
 import net.mgsx.gltf.scene3d.scene.Scene;
 

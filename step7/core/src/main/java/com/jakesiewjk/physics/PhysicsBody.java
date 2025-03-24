@@ -1,4 +1,4 @@
-package com.jakesiewjk;
+package com.jakesiewjk.physics;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
@@ -11,6 +11,7 @@ import com.github.antzGames.gdx.ode4j.math.DQuaternionC;
 import com.github.antzGames.gdx.ode4j.math.DVector3C;
 import com.github.antzGames.gdx.ode4j.ode.DBody;
 import com.github.antzGames.gdx.ode4j.ode.DGeom;
+import com.jakesiewjk.Settings;
 
 public class PhysicsBody {
   public DGeom geom;

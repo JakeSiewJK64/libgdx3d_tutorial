@@ -1,7 +1,8 @@
-package com.jakesiewjk;
+package com.jakesiewjk.physics;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -22,6 +23,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.github.antzGames.gdx.ode4j.ode.DBody;
 import com.github.antzGames.gdx.ode4j.ode.DGeom;
 import com.github.antzGames.gdx.ode4j.ode.DMass;
+import com.github.antzGames.gdx.ode4j.ode.DTriMeshData;
 import com.github.antzGames.gdx.ode4j.ode.OdeHelper;
 
 public class PhysicsBodyFactory implements Disposable {
@@ -83,6 +85,11 @@ public class PhysicsBodyFactory implements Disposable {
         len = h;
         geom = OdeHelper.createCylinder(physicsWorld.space, radius, len);
         break;
+      case MESH:
+        DTriMeshData triMeshData = OdeHelper.createTriMeshData();
+        fillTriData(triMeshData, collisionInstance);
+        geom = OdeHelper.createTriMesh(physicsWorld.space, triMeshData, null, null, null);
+        break;
       default:
         throw new RuntimeException("Unknown shape type");
     }
@@ -124,6 +131,9 @@ public class PhysicsBodyFactory implements Disposable {
       case CYLINDER:
         CylinderShapeBuilder.build(meshBuilder, diameter, h, diameter, 12);
         break;
+      case MESH:
+        buildLineMesh(meshBuilder, collisionInstance);
+        break;
       default:
         throw new RuntimeException("Unknown shape type");
     }
@@ -140,6 +150,68 @@ public class PhysicsBodyFactory implements Disposable {
     body.setPosition(position);
     body.setOrientation(q);
     return body;
+  }
+
+  private void fillTriData(DTriMeshData triData, ModelInstance instance) {
+    Mesh mesh = instance.nodes.first().parts.first().meshPart.mesh;
+    int numVertices = mesh.getNumVertices();
+    int numIndices = mesh.getNumIndices();
+    int stride = mesh.getVertexSize() / 4;
+
+    float[] origVertices = new float[numVertices * stride];
+    short[] origIndices = new short[numIndices];
+    int posOffset = mesh.getVertexAttributes().findByUsage(VertexAttributes.Usage.Position).offset / 4;
+    mesh.getVertices(origVertices);
+    mesh.getIndices(origIndices);
+
+    float[] vertices = new float[3 * numVertices];
+    int[] indices = new int[numIndices];
+
+    for (int v = 0; v < numVertices; v++) {
+      vertices[v * 3] = origVertices[stride * v + posOffset]; // X := x
+      vertices[v * 3 + 1] = -origVertices[stride * v + 2 + posOffset]; // Y := -z
+      vertices[v * 3 + 2] = origVertices[stride * v + 1 + posOffset]; // Z := y
+    }
+
+    for (int i = 0; i < numIndices; i++) {
+      indices[i] = origIndices[i];
+    }
+
+    triData.build(vertices, indices);
+    triData.preprocess();
+  }
+
+  private void buildLineMesh(MeshPartBuilder meshBuilder, ModelInstance instance) {
+    Mesh mesh = instance.nodes.first().parts.first().meshPart.mesh;
+    int numVertices = mesh.getNumVertices();
+    int numIndices = mesh.getNumIndices();
+    int stride = mesh.getVertexSize() / 4; // floats per vertex in mesh
+
+    float[] origVertices = new float[numIndices * stride];
+    short[] origIndices = new short[numIndices];
+
+    // find offset of position floats per vertex, they are not necessarily the first
+    // 3 floats
+    int posOffset = mesh.getVertexAttributes().findByUsage(VertexAttributes.Usage.Position).offset / 4;
+
+    mesh.getVertices(origVertices);
+    mesh.getIndices(origIndices);
+
+    meshBuilder.ensureVertices(numVertices);
+
+    for (int v = 0; v < numVertices; v++) {
+      float x = origVertices[stride * v + posOffset];
+      float y = origVertices[stride * v + 1 + posOffset];
+      float z = origVertices[stride * v + 2 + posOffset];
+
+      meshBuilder.vertex(x, y, z);
+    }
+
+    meshBuilder.ensureTriangleIndices(numIndices / 3);
+
+    for (int i = 0; i < numIndices; i += 3) {
+      meshBuilder.triangle(origIndices[i], origIndices[i + 1], origIndices[i + 2]);
+    }
   }
 
   @Override

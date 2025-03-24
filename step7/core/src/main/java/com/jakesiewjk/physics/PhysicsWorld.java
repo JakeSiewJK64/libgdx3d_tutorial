@@ -1,4 +1,4 @@
-package com.jakesiewjk;
+package com.jakesiewjk.physics;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Disposable;
@@ -14,6 +14,7 @@ import com.github.antzGames.gdx.ode4j.ode.DSpace;
 import com.github.antzGames.gdx.ode4j.ode.DSphere;
 import com.github.antzGames.gdx.ode4j.ode.DWorld;
 import com.github.antzGames.gdx.ode4j.ode.OdeHelper;
+import com.jakesiewjk.Settings;
 
 import static com.github.antzGames.gdx.ode4j.ode.OdeConstants.*;
 

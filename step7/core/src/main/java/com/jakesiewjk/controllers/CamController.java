@@ -1,4 +1,4 @@
-package com.jakesiewjk;
+package com.jakesiewjk.controllers;
 
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Camera;

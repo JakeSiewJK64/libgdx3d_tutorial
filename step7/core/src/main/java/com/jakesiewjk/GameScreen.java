@@ -4,6 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.jakesiewjk.physics.PhysicsView;
+import com.jakesiewjk.views.GameView;
+import com.jakesiewjk.views.GridView;
 
 public class GameScreen implements Screen {
     private GameView gameView;
@@ -14,7 +17,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-        world = new World("models/step4a.gltf");
+        world = new World(Settings.GLTF_FILE);
         Populator.populate(world);
         gameView = new GameView(world);
         gridView = new GridView();
