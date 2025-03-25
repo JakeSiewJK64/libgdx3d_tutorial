@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.jakesiewjk.controllers.PlayerController;
 import com.jakesiewjk.physics.PhysicsBody;
 import com.jakesiewjk.physics.PhysicsBodyFactory;
+import com.jakesiewjk.physics.PhysicsRayCaster;
 import com.jakesiewjk.physics.PhysicsWorld;
 import com.jakesiewjk.physics.enums.CollisionShapeType;
 
@@ -25,15 +26,17 @@ public class World implements Disposable {
   private final Vector3 spawnPos = new Vector3();
   private final Vector3 shootDirection = new Vector3();
   private final PlayerController playerController;
+  private final PhysicsRayCaster physicsRayCaster;
   private boolean isDirty;
   public GameObject player;
 
   public World(String modelFileName) {
-    playerController = new PlayerController();
     gameObjects = new Array<>();
     physicsWorld = new PhysicsWorld();
     factory = new PhysicsBodyFactory(physicsWorld);
     sceneAsset = new GLTFLoader().load(Gdx.files.internal(modelFileName));
+    physicsRayCaster = new PhysicsRayCaster(physicsWorld);
+    playerController = new PlayerController(physicsRayCaster);
 
     for (Node node : sceneAsset.scene.model.nodes) {
       Gdx.app.log("node: ", node.id);

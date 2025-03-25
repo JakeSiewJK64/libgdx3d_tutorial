@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.IntIntMap;
 import com.jakesiewjk.GameObject;
 import com.jakesiewjk.Settings;
+import com.jakesiewjk.physics.PhysicsRayCaster;
 
 public class PlayerController extends InputAdapter {
   public int forwardKey = Input.Keys.W;
@@ -27,8 +28,12 @@ public class PlayerController extends InputAdapter {
   private final Vector3 tmp = new Vector3();
   private final Vector3 tmp2 = new Vector3();
   private final Vector3 tmp3 = new Vector3();
+  private final Vector3 groundNormal = new Vector3();
+  private final PhysicsRayCaster physicsRayCaster;
 
-  public PlayerController() {
+  public PlayerController(PhysicsRayCaster physicsRayCaster) {
+    this.physicsRayCaster = physicsRayCaster;
+
     linearForce = new Vector3();
     forwardDirection = new Vector3();
     viewingDirection = new Vector3();
@@ -112,6 +117,16 @@ public class PlayerController extends InputAdapter {
 
     linearForce.set(0, 0, 0);
 
+    boolean isOnGround = physicsRayCaster.isGrounded(player, player.getPosition(), Settings.groundRayLength,
+        groundNormal);
+
+    if (isOnGround) {
+      float dot = groundNormal.dot(Vector3.Y);
+      player.body.geom.getBody().setGravityMode(dot >= .99f);
+    } else {
+      player.body.geom.getBody().setGravityMode(true);
+    }
+
     float moveSpeed = Settings.walkSpeed;
 
     if (keys.containsKey(runShiftKey)) {
@@ -147,7 +162,7 @@ public class PlayerController extends InputAdapter {
       rotateView(-deltaTime * Settings.turnSpeed, 0);
     }
 
-    if (keys.containsKey(jumpKey)) {
+    if (isOnGround && keys.containsKey(jumpKey)) {
       linearForce.y = Settings.jumpForce;
     }
 

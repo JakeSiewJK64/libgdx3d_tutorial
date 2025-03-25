@@ -26,4 +26,6 @@ public class Settings {
   static public float playerAngularDamping = 0.5f;
 
   static public final String GLTF_FILE = "models/step12.gltf";
+
+  static public float groundRayLength = 1.2f;
 }
