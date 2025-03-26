@@ -129,6 +129,7 @@ public class World implements Disposable {
   public void dispose() {
     sceneAsset.dispose();
     physicsWorld.dispose();
+    physicsRayCaster.dispose();
   }
 
   public void shootBall() {
