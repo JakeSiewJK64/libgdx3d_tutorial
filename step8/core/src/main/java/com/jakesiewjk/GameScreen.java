@@ -12,6 +12,8 @@ public class GameScreen implements Screen {
     private GameView gameView;
     private GridView gridView;
     private PhysicsView physicsView;
+    private int windowWidth;
+    private int windowHeight;
     private World world;
     private boolean debugRender = false;
 
@@ -51,10 +53,28 @@ public class GameScreen implements Screen {
             debugRender = !debugRender;
         }
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F11)) {
+            toggleFullScreen();
+        }
+
         if (debugRender) {
             gridView.render(gameView.getCamera());
             physicsView.render(gameView.getCamera());
         }
+    }
+
+    private void toggleFullScreen() {
+        if (!Gdx.graphics.isFullscreen()) {
+            windowWidth = Gdx.graphics.getWidth();
+            windowHeight = Gdx.graphics.getHeight();
+
+            Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+            resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            return;
+        }
+
+        Gdx.graphics.setWindowedMode(windowWidth, windowHeight);
+        resize(windowWidth, windowHeight);
     }
 
     @Override
