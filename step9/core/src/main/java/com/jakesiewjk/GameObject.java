@@ -6,12 +6,14 @@ import com.jakesiewjk.physics.PhysicsBody;
 import net.mgsx.gltf.scene3d.scene.Scene;
 
 public class GameObject {
+  public final GameObjectType type;
   public final Scene scene;
   public final Vector3 direction;
   public final PhysicsBody body;
   public boolean visible;
 
-  public GameObject(Scene scene, PhysicsBody body) {
+  public GameObject(GameObjectType type, Scene scene, PhysicsBody body) {
+    this.type = type;
     this.scene = scene;
     this.body = body;
 

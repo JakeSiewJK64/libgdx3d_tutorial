@@ -32,7 +32,7 @@ public class World implements Disposable {
 
   public World(String modelFileName) {
     gameObjects = new Array<>();
-    physicsWorld = new PhysicsWorld();
+    physicsWorld = new PhysicsWorld(this);
     factory = new PhysicsBodyFactory(physicsWorld);
     sceneAsset = new GLTFLoader().load(Gdx.files.internal(modelFileName));
     physicsRayCaster = new PhysicsRayCaster(physicsWorld);
@@ -58,7 +58,8 @@ public class World implements Disposable {
     isDirty = true;
   }
 
-  public GameObject spawnObject(boolean isStatic, String name, String proxyName, CollisionShapeType shape,
+  public GameObject spawnObject(GameObjectType type, String name, String proxyName,
+      CollisionShapeType shape,
       boolean resetPosition,
       Vector3 position, float mass) {
     Scene scene = loadNode(name, resetPosition, position);
@@ -69,8 +70,8 @@ public class World implements Disposable {
       collisionInstance = proxyScene.modelInstance;
     }
 
-    PhysicsBody body = factory.createBody(collisionInstance, shape, mass, isStatic);
-    GameObject go = new GameObject(scene, body);
+    PhysicsBody body = factory.createBody(collisionInstance, shape, mass, type.isStatic);
+    GameObject go = new GameObject(type, scene, body);
     gameObjects.add(go);
     isDirty = true;
 
@@ -138,11 +139,28 @@ public class World implements Disposable {
     Vector3 playerPosition = player.getPosition();
     spawnPos.add(playerPosition);
 
-    GameObject ball = spawnObject(false, "ball", null, CollisionShapeType.SPHERE, true, spawnPos, Settings.ballMass);
+    GameObject ball = spawnObject(GameObjectType.TYPE_DYNAMIC, "ball", null, CollisionShapeType.SPHERE, true, spawnPos,
+        Settings.ballMass);
     shootDirection.set(dir);
     shootDirection.y += .5f;
     shootDirection.scl(Settings.ballForce);
     ball.body.applyForce(shootDirection);
+  }
+
+  public void onCollision(GameObject go1, GameObject go2) {
+    // try either order
+    handleCollision(go1, go2);
+    handleCollision(go2, go1);
+  }
+
+  private void handleCollision(GameObject go1, GameObject go2) {
+    if (go1.type.isPlayer && go2.type.canPickup) {
+      pickup(go1, go2);
+    }
+  }
+
+  private void pickup(GameObject character, GameObject pickup) {
+    removeObject(pickup);
   }
 
   public GameObject getPlayer() {

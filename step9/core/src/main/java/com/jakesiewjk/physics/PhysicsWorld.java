@@ -20,15 +20,19 @@ import com.github.antzGames.gdx.ode4j.ode.DSpace;
 import com.github.antzGames.gdx.ode4j.ode.DSphere;
 import com.github.antzGames.gdx.ode4j.ode.DWorld;
 import com.github.antzGames.gdx.ode4j.ode.OdeHelper;
+import com.jakesiewjk.GameObject;
 import com.jakesiewjk.Settings;
+import com.jakesiewjk.World;
 
 public class PhysicsWorld implements Disposable {
 
   public DWorld world;
   public DSpace space;
+  private final World gameWorld;
   private final DJointGroup contactGroup;
 
-  public PhysicsWorld() {
+  public PhysicsWorld(World gameWorld) {
+    this.gameWorld = gameWorld;
     OdeHelper.initODE2(0);
     Gdx.app.log("ODE version", OdeHelper.getVersion());
     Gdx.app.log("ODE config", OdeHelper.getVersion());
@@ -83,6 +87,8 @@ public class PhysicsWorld implements Disposable {
       int n = OdeHelper.collide(o1, o2, N, contacts.getGeomBuffer());
 
       if (n > 0) {
+        gameWorld.onCollision((GameObject) o1.getData(), (GameObject) o2.getData());
+
         for (int i = 0; i < n; i++) {
           DContact contact = contacts.get(i);
           contact.surface.mode = dContactSlip1 | dContactSlip2 | dContactSoftERP | dContactSoftCFM | dContactApprox1;
