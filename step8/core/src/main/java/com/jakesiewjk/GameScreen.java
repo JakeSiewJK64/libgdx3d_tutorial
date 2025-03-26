@@ -102,6 +102,7 @@ public class GameScreen implements Screen {
     public void dispose() {
         gridView.dispose();
         gameView.dispose();
+        physicsView.dispose();
         world.dispose();
     }
 }
