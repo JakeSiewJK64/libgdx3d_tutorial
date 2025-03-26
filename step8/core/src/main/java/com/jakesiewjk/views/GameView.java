@@ -32,6 +32,7 @@ public class GameView implements Disposable {
   private Cubemap specularCubemap;
   private Texture brdfLUT;
   private SceneSkybox skybox;
+  private float bobAngle;
 
   public GameView(World world) {
     this.world = world;
@@ -115,6 +116,7 @@ public class GameView implements Disposable {
     }
 
     cameraController.update(world.getPlayer().getPosition(), world.getPlayerController().getViewingDirection());
+    addHeadBob(delta);
     camera.update();
 
     if (world.isDirty()) {
@@ -126,6 +128,12 @@ public class GameView implements Disposable {
     // render
     ScreenUtils.clear(Color.PURPLE, true);
     sceneManager.render();
+  }
+
+  private void addHeadBob(float dt) {
+    float speed = world.getPlayer().body.getVelocity().len();
+    bobAngle += speed * dt * Math.PI / Settings.headBobDuration;
+    camera.position.y += Settings.headBobScale * Settings.headBobHeight * (float) Math.sin(bobAngle);
   }
 
   public CamController getCameraController() {

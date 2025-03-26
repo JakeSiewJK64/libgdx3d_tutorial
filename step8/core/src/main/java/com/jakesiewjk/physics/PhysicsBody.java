@@ -15,6 +15,7 @@ import com.jakesiewjk.Settings;
 
 public class PhysicsBody {
   public DGeom geom;
+  private final Vector3 linearVelocity;
   private Vector3 position;
   private Quaternion quaternion;
   private ModelInstance debugInstance;
@@ -27,6 +28,7 @@ public class PhysicsBody {
     this.geom = geom;
     this.debugInstance = debugInstance;
     position = new Vector3();
+    linearVelocity = new Vector3();
     quaternion = new Quaternion();
   }
 
@@ -90,6 +92,17 @@ public class PhysicsBody {
   public void applyForce(Vector3 force) {
     DBody rigidBody = geom.getBody();
     rigidBody.addForce(force.x, -force.z, force.y); // swap -z and y
+  }
+
+  public Vector3 getVelocity() {
+    if (geom.getBody() == null) {
+      linearVelocity.set(Vector3.Zero);
+    } else {
+      DVector3C v = geom.getBody().getLinearVel();
+      linearVelocity.set((float) v.get0(), (float) v.get1(), (float) v.get2());
+    }
+
+    return linearVelocity;
   }
 
   // player physics does not go to sleep if inactivity
