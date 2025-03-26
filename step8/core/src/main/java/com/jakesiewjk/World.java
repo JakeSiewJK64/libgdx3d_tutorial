@@ -108,10 +108,9 @@ public class World implements Disposable {
   }
 
   public void update(float deltaTime) {
+    playerController.update(player, deltaTime);
     physicsWorld.update();
     syncToPhysics();
-
-    playerController.update(player, deltaTime);
   }
 
   private void syncToPhysics() {

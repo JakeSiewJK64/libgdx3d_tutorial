@@ -16,7 +16,7 @@ public class PhysicsRayCaster implements Disposable {
 
   public PhysicsRayCaster(PhysicsWorld world) {
     this.world = world;
-    groundRay = OdeHelper.createRay(1);
+    groundRay = OdeHelper.createRay(3);
   }
 
   public boolean isGrounded(GameObject player, Vector3 playerPos, float rayLength, Vector3 groundNormal) {

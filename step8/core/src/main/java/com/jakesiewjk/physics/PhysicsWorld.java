@@ -1,5 +1,11 @@
 package com.jakesiewjk.physics;
 
+import static com.github.antzGames.gdx.ode4j.ode.OdeConstants.dContactApprox1;
+import static com.github.antzGames.gdx.ode4j.ode.OdeConstants.dContactSlip1;
+import static com.github.antzGames.gdx.ode4j.ode.OdeConstants.dContactSlip2;
+import static com.github.antzGames.gdx.ode4j.ode.OdeConstants.dContactSoftCFM;
+import static com.github.antzGames.gdx.ode4j.ode.OdeConstants.dContactSoftERP;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Disposable;
 import com.github.antzGames.gdx.ode4j.ode.DBody;
@@ -15,8 +21,6 @@ import com.github.antzGames.gdx.ode4j.ode.DSphere;
 import com.github.antzGames.gdx.ode4j.ode.DWorld;
 import com.github.antzGames.gdx.ode4j.ode.OdeHelper;
 import com.jakesiewjk.Settings;
-
-import static com.github.antzGames.gdx.ode4j.ode.OdeConstants.*;
 
 public class PhysicsWorld implements Disposable {
 
@@ -53,13 +57,13 @@ public class PhysicsWorld implements Disposable {
     // set auto disable parameters to make inactive objects
     world.setAutoDisableFlag(true);
     world.setAutoDisableLinearThreshold(.1);
-    world.setAutoDisableAngularThreshold(.001);
+    world.setAutoDisableAngularThreshold(.1);
     world.setAutoDisableTime(2);
   }
 
   public void update() {
     space.collide(null, nearCallback);
-    world.quickStep(.05f);
+    world.quickStep(.025f);
     contactGroup.empty();
   }
 
