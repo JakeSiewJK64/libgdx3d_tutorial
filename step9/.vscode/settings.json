@@ -1,0 +1,7 @@
+{
+  "[java]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "always"
+    }
+  }
+}
