@@ -19,6 +19,7 @@ public class PlayerController extends InputAdapter {
   public int jumpKey = Input.Keys.SPACE;
   public int runShiftKey = Input.Keys.SHIFT_LEFT;
 
+  private boolean isOnGround = false;
   private final IntIntMap keys = new IntIntMap();
   private final Vector3 linearForce;
   private final Vector3 forwardDirection;
@@ -109,6 +110,10 @@ public class PlayerController extends InputAdapter {
     linearForce.add(tmp);
   }
 
+  public boolean getIsOnGround() {
+    return isOnGround;
+  }
+
   public void update(GameObject player, float deltaTime) {
     // derive forward direction vector from viewing direction
     forwardDirection.set(viewingDirection);
@@ -117,7 +122,7 @@ public class PlayerController extends InputAdapter {
 
     linearForce.set(0, 0, 0);
 
-    boolean isOnGround = physicsRayCaster.isGrounded(player, player.getPosition(), Settings.groundRayLength,
+    isOnGround = physicsRayCaster.isGrounded(player, player.getPosition(), Settings.groundRayLength,
         groundNormal);
 
     if (isOnGround) {

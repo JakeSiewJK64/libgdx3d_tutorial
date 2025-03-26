@@ -28,7 +28,7 @@ public class World implements Disposable {
   private final PlayerController playerController;
   private final PhysicsRayCaster physicsRayCaster;
   private boolean isDirty;
-  public GameObject player;
+  private GameObject player;
 
   public World(String modelFileName) {
     gameObjects = new Array<>();

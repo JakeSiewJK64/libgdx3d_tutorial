@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.jakesiewjk.Settings;
 import com.jakesiewjk.World;
 import com.jakesiewjk.controllers.CamController;
+import com.jakesiewjk.controllers.PlayerController;
 
 import net.mgsx.gltf.scene3d.attributes.PBRCubemapAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRTextureAttribute;
@@ -131,6 +132,13 @@ public class GameView implements Disposable {
   }
 
   private void addHeadBob(float dt) {
+    PlayerController playerController = world.getPlayerController();
+    boolean grounded = playerController.getIsOnGround();
+
+    if (!grounded) {
+      return;
+    }
+
     float speed = world.getPlayer().body.getVelocity().len();
     bobAngle += speed * dt * Math.PI / Settings.headBobDuration;
     camera.position.y += Settings.headBobScale * Settings.headBobHeight * (float) Math.sin(bobAngle);
