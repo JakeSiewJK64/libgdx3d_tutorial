@@ -125,7 +125,10 @@ public class PlayerController extends InputAdapter {
     isOnGround = physicsRayCaster.isGrounded(player, player.getPosition(), Settings.groundRayLength,
         groundNormal);
 
+    // climbing slopes
     if (isOnGround) {
+      // returns 1 if same direction, -1 if opposite direction
+      // 0 if perpendicular
       float dot = groundNormal.dot(Vector3.Y);
       player.body.geom.getBody().setGravityMode(dot >= .99f);
     } else {
