@@ -1,4 +1,4 @@
-package com.jakesiewjk.physics_tutorial;
+package com.jakesiewjk;
 
 import com.badlogic.gdx.Screen;
 
