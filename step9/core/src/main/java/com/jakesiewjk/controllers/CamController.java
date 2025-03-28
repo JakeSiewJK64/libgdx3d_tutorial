@@ -3,16 +3,15 @@ package com.jakesiewjk.controllers;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector3;
+import com.jakesiewjk.Settings;
 
 public class CamController extends InputAdapter {
   private final Camera camera;
   private boolean thirdPersonMode = true;
-  private final Vector3 offset = new Vector3();
   private float distance = 5f;
 
   public CamController(Camera camera) {
     this.camera = camera;
-    offset.set(0, 2, -3);
   }
 
   public void setThirdPersonMode(boolean mode) {
@@ -28,6 +27,7 @@ public class CamController extends InputAdapter {
 
     if (thirdPersonMode) {
       // offset camera from player position
+      Vector3 offset = new Vector3();
       offset.set(viewDirection).scl(-1);
       offset.y = Math.max(0, offset.y);
       offset.nor().scl(distance);
@@ -36,6 +36,9 @@ public class CamController extends InputAdapter {
       camera.lookAt(playerPosition);
       camera.up.set(Vector3.Y);
     } else {
+      // Push camera slightly back along the view direction
+      Vector3 pushBack = new Vector3(viewDirection).scl(Settings.camDistanceFromFront);
+      camera.position.add(pushBack);
       camera.direction.set(viewDirection);
     }
 

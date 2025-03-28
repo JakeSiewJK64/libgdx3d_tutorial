@@ -40,13 +40,7 @@ public class GameView implements Disposable {
     sceneManager = new SceneManager();
 
     // Prepare your screen here.
-    camera = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getWidth());
-    camera.position.set(10f, 1.5f, 5.f);
-    camera.lookAt(0, Settings.eyeHeight, 0);
-    camera.near = 1f;
-    camera.far = 300f;
-    camera.update();
-
+    camera = new PerspectiveCamera(Settings.cameraFOV, Gdx.graphics.getWidth(), Gdx.graphics.getWidth());
     cameraController = new CamController(camera);
     sceneManager.setCamera(camera);
 
