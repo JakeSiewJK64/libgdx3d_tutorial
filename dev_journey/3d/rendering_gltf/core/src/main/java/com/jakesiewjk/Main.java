@@ -1,4 +1,4 @@
-package com.jakesiewjk.rendering_gltf;
+package com.jakesiewjk;
 
 import com.badlogic.gdx.Game;
 
