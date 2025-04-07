@@ -75,6 +75,8 @@ public class PlayerController extends InputAdapter {
     mouseDeltaX = -Gdx.input.getDeltaX() * Settings.degreesPerPixel;
     mouseDeltaY = -Gdx.input.getDeltaY() * Settings.degreesPerPixel;
 
+    Gdx.app.log("DEBUG", viewingDirection.toString());
+
     return true;
   }
 
